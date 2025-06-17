@@ -635,9 +635,9 @@ class Function:  # pylint: disable=too-many-public-methods
         Parameters
         ----------
         lower : scalar, optional
-            Value where sampling range will start. Default is 0.
+            Value where sampling range will start. Default is None.
         upper : scalar, optional
-            Value where sampling range will end. Default is 10.
+            Value where sampling range will end. Default is None.
         samples : int, optional
             Number of samples to be taken from inside range. Default is 200.
         interpolation : string
@@ -701,7 +701,7 @@ class Function:  # pylint: disable=too-many-public-methods
                             domain[i][0] = self.__interval__[i][0]
                         if self.__interval__[i][1] < domain[i][1]:
                             domain[i][1] = self.__interval__[i][1]
-            lower = [domain[0][0], domain[1][0]] if lower is None else lower
+            lower = lower or [domain[0][0], domain[1][0]]
             lower = 2 * [lower] if isinstance(lower, NUMERICAL_TYPES) else lower
             upper = [domain[0][1], domain[1][1]] if upper is None else upper
             upper = 2 * [upper] if isinstance(upper, NUMERICAL_TYPES) else upper
@@ -1019,18 +1019,17 @@ class Function:  # pylint: disable=too-many-public-methods
                 (self.source[:, self.__dom_dim__] >= y_lim[0][0])
                 & (self.source[:, self.__dom_dim__] <= y_lim[0][1])
             ]
+        elif isinstance(self.source, NUMERICAL_TYPES):
+            try:
+                if self.source < y_lim[0][0]:
+                    raise ArithmeticError("Constant function outside range")
+                if self.source > y_lim[0][1]:
+                    raise ArithmeticError("Constant function outside range")
+            except TypeError as e:
+                raise TypeError("y_lim must be the same type as the function source") from e
         elif callable(self.source):
-            if isinstance(self.source, NUMERICAL_TYPES):
-                try:
-                    if self.source < y_lim[0][0]:
-                        raise ArithmeticError("Constant function outside range")
-                    if self.source > y_lim[0][1]:
-                        raise ArithmeticError("Constant function outside range")
-                except TypeError as e:
-                    raise TypeError("y_lim must be same type as function source") from e
-            else:
-                f = self.source
-                self.source = lambda x: max(y_lim[0][0], min(y_lim[0][1], f(x)))
+            f = self.source
+            self.source = lambda x: max(y_lim[0][0], min(y_lim[0][1], f(x)))
         try:
             self.set_source(self.source)
         except ValueError as e:
@@ -1797,7 +1796,7 @@ class Function:  # pylint: disable=too-many-public-methods
                             domain[i][0] = self.__interval__[i][0]
                         if self.__interval__[i][1] < domain[i][1]:
                             domain[i][1] = self.__interval__[i][1]
-            lower = [domain[0][0], domain[1][0]] if lower is None else lower
+            lower = lower or [domain[0][0], domain[1][0]]
             lower = 2 * [lower] if isinstance(lower, NUMERICAL_TYPES) else lower
             upper = [domain[0][1], domain[1][1]] if upper is None else upper
             upper = 2 * [upper] if isinstance(upper, NUMERICAL_TYPES) else upper
