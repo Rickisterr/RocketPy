@@ -714,11 +714,8 @@ class Function:  # pylint: disable=too-many-public-methods
                             domain[i][0] = self.__interval__[i][0]
                         if self.__interval__[i][1] < domain[i][1]:
                             domain[i][1] = self.__interval__[i][1]
-<<<<<<< HEAD
             lower = lower or [domain[0][0], domain[1][0]]
-=======
             lower = [domain[0][0], domain[1][0]] if lower is None else lower
->>>>>>> f73c3363dfc6d1c9c0b5044d8df9e10088c276f0
             lower = 2 * [lower] if isinstance(lower, NUMERICAL_TYPES) else lower
             upper = [domain[0][1], domain[1][1]] if upper is None else upper
             upper = 2 * [upper] if isinstance(upper, NUMERICAL_TYPES) else upper
@@ -1036,7 +1033,6 @@ class Function:  # pylint: disable=too-many-public-methods
                 (self.source[:, self.__dom_dim__] >= y_lim[0][0])
                 & (self.source[:, self.__dom_dim__] <= y_lim[0][1])
             ]
-<<<<<<< HEAD
         elif isinstance(self.source, NUMERICAL_TYPES):
             try:
                 if self.source < y_lim[0][0]:
@@ -1048,7 +1044,6 @@ class Function:  # pylint: disable=too-many-public-methods
         elif callable(self.source):
             f = self.source
             self.source = lambda x: max(y_lim[0][0], min(y_lim[0][1], f(x)))
-=======
         elif callable(self.source):
             if isinstance(self.source, NUMERICAL_TYPES):
                 try:
@@ -1061,7 +1056,6 @@ class Function:  # pylint: disable=too-many-public-methods
             else:
                 f = self.source
                 self.source = lambda x: max(y_lim[0][0], min(y_lim[0][1], f(x)))
->>>>>>> f73c3363dfc6d1c9c0b5044d8df9e10088c276f0
         try:
             self.set_source(self.source)
         except ValueError as e:
@@ -1828,11 +1822,8 @@ class Function:  # pylint: disable=too-many-public-methods
                             domain[i][0] = self.__interval__[i][0]
                         if self.__interval__[i][1] < domain[i][1]:
                             domain[i][1] = self.__interval__[i][1]
-<<<<<<< HEAD
             lower = lower or [domain[0][0], domain[1][0]]
-=======
             lower = [domain[0][0], domain[1][0]] if lower is None else lower
->>>>>>> f73c3363dfc6d1c9c0b5044d8df9e10088c276f0
             lower = 2 * [lower] if isinstance(lower, NUMERICAL_TYPES) else lower
             upper = [domain[0][1], domain[1][1]] if upper is None else upper
             upper = 2 * [upper] if isinstance(upper, NUMERICAL_TYPES) else upper
